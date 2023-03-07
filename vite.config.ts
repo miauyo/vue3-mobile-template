@@ -3,7 +3,6 @@ import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import Components from 'unplugin-vue-components/vite';
 import { VantResolver } from 'unplugin-vue-components/resolvers';
-import { viteVConsole } from 'vite-plugin-vconsole';
 import path from 'path';
 
 const resolve = (name: string): string => path.resolve(__dirname, name);
@@ -20,32 +19,11 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       },
     },
 
-    css: {
-      preprocessorOptions: {
-        less: {
-          modifyVars: {
-            hack: `true; @import (reference) "${path.resolve('src/style/variables.less')}";`,
-          },
-          math: 'strict',
-          javascriptEnabled: true,
-        },
-      },
-    },
-
     plugins: [
       vue(),
       vueJsx(),
       Components({
         resolvers: [VantResolver()],
-      }),
-      viteVConsole({
-        entry: resolve('src/main.ts'),
-        localEnabled: command === 'serve',
-        enabled: command === 'build' && mode === 'test',
-        config: {
-          maxLogNumber: 1000,
-          theme: 'light',
-        },
       }),
     ],
 
